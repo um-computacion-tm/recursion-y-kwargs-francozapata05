@@ -1,18 +1,39 @@
 import unittest
 
-#Programa que al insertar ej: Franco, Zapata, dict.
-#Tiene que detectar si ese nombre y apellido le pertenece a alguna persona del diccionario.
-
 def buscar_datos(*args,**kwargs):
     
-    #Falta que funcione insertando los datos desordenados.
 
     for clave, personas in kwargs.items():
         
-        if list(args) == list(personas.values()):
+        lista_argumentos = list(args)
+        lista_atributos = list(personas.values())
+
+        for elemento in lista_atributos:
+            
+            if elemento == "":
+                lista_atributos.remove(elemento)
+            else:
+                pass
+
+
+        if lista_argumentos == lista_atributos:
 
             return clave
-    
+
+        i=0        
+        for arg in lista_argumentos:
+
+            if arg == "":
+                lista_argumentos.remove("")
+
+            
+            if arg in lista_atributos:
+                i = i + 1
+
+        
+        if i == len(lista_atributos):
+            return clave
+        
     return False
 
 
@@ -31,20 +52,34 @@ database = {
     }
 }
 
-buscar_datos("Pablo", "Diego", "Ruiz", "Picasso", **database)
-
 class TestBuscarDatos(unittest.TestCase):
     
     def test_1(self):
         resultado = buscar_datos("Pablo", "Diego", "Ruiz", "Picasso", **database)
         self.assertEqual(resultado,"persona1")
 
+    def test_1b(self):
+        resultado = buscar_datos("Diego", "Pablo", "Picasso", "Ruiz", **database)
+        self.assertEqual(resultado,"persona1")
+
     def test_2(self):
         resultado = buscar_datos("Franco", "Agustin", "Zapata", "", **database)
         self.assertEqual(resultado,"persona2")
 
+    def test_2b(self):
+        resultado = buscar_datos("Zapata", "Franco","Agustin", "", **database)
+        self.assertEqual(resultado,"persona2")
+
+    def test_2c(self):
+        resultado = buscar_datos("Zapata", "Franco","Agustin", **database)
+        self.assertEqual(resultado,"persona2")
+
     def test_False(self):
         resultado = buscar_datos("Juan", "Diego", "Ruiz", "Picasso", **database)
+        self.assertEqual(resultado,False)
+
+    def test_error(self):
+        resultado = buscar_datos("123", "111","222", **database)
         self.assertEqual(resultado,False)
 
 
