@@ -9,14 +9,12 @@ def buscar_datos(*args,**kwargs):
 
     for clave, personas in kwargs.items():
         
-        if personas["primer_nombre"] == args[0]:
-            if personas["segundo_nombre"] == args[1]:
-                if personas["primer_apellido"] == args[2]:
-                    if personas["segundo_apellido"] == args[3]:
-                        
-                        return clave
+        if list(args) == list(personas.values()):
 
+            return clave
+    
     return False
+
 
 database = {
     "persona1": {
@@ -33,6 +31,8 @@ database = {
     }
 }
 
+buscar_datos("Pablo", "Diego", "Ruiz", "Picasso", **database)
+
 class TestBuscarDatos(unittest.TestCase):
     
     def test_1(self):
@@ -42,7 +42,7 @@ class TestBuscarDatos(unittest.TestCase):
     def test_2(self):
         resultado = buscar_datos("Franco", "Agustin", "Zapata", "", **database)
         self.assertEqual(resultado,"persona2")
-    
+
     def test_False(self):
         resultado = buscar_datos("Juan", "Diego", "Ruiz", "Picasso", **database)
         self.assertEqual(resultado,False)
